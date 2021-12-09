@@ -1,16 +1,8 @@
-# Node modules
-node_modules/
-
-# Dist folder
-dist/
-
-# Actual .dev files
-dev.env
-prod.env
-
-# Local only files
-NOTES.md
-local/
+# NOTE - each of subfolders should have its own .gitignore file
+# This one servers for the root folder
 
 # .vscode (whole folder - for now)
 .vscode/
+
+# pnpm debug log
+.pnpm-debug.log
