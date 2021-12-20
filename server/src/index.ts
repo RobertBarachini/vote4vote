@@ -12,7 +12,9 @@ import {
 import connectRedis from 'connect-redis';
 import session from 'express-session';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import mikroConfig from './mikro-orm.config';
+import { COOKIE_NAME } from './constants';
 import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
@@ -44,7 +46,7 @@ const main = async () => {
 
 	app.use(
 		session({
-			name: 'qid',
+			name: COOKIE_NAME,
 			store: new RedisStore({
 				client: redisClient,
 				disableTouch: true,
@@ -52,7 +54,8 @@ const main = async () => {
 			cookie: {
 				maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
 				httpOnly: true,
-				sameSite: 'lax', // csrf
+				sameSite: 'lax', // 'none', // lax', // 'lax', // csrf
+				// eslint-disable-next-line max-len
 				secure: process.env.NODE_ENV === 'production', // only set secure cookies in production with https
 			},
 			saveUninitialized: false,
@@ -61,11 +64,31 @@ const main = async () => {
 		}),
 	);
 
+	const corsOrigins = [
+		'http://localhost:3000',
+		// '*',
+	];
+
 	if (process.env.NODE_ENV === 'development') {
-		// eslint-disable-next-line global-require
-		const cors = require('cors');
-		app.use(cors());
+		corsOrigins.push(process.env.CORS_DEVELOPMENT_ORIGIN!);
+		// corsOrigins.push('*');  hm
 	}
+
+	console.log(corsOrigins);
+
+	// / TEST
+	app.use(
+		cors({
+			origin: corsOrigins, // 'http://localhost:3000', // corsOrigins,
+			credentials: true,
+		}),
+	);
+
+	// if (process.env.NODE_ENV === 'development') {
+	// 	// eslint-disable-next-line global-require
+	// 	const cors = require('cors');
+	// 	app.use(cors());
+	// }
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
@@ -96,8 +119,17 @@ const main = async () => {
 		// 		path: '/graphql',
 		// 	}),
 		// );
-		apolloServer.applyMiddleware({ app, path: '/graphql' });
+		apolloServer.applyMiddleware({
+			app,
+			path: '/graphql',
+			// cors: {
+			// 	credentials: true,
+			// 	origin: corsOrigins,
+			// },
+			cors: false,
+		});
 	}
+	// TEST
 
 	app.listen(PORT, () => {
 		console.log(`Environment: '${process.env.NODE_ENV}'`);

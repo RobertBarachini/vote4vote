@@ -1,9 +1,12 @@
+/* eslint-disable no-new */
+/* eslint-disable no-promise-executor-return */
 /* eslint-disable max-classes-per-file */
 import {
 	Resolver, Arg, Mutation, Ctx, Field, InputType, ObjectType, Query,
 } from 'type-graphql';
 import argon2 from 'argon2';
 import { ObjectId } from 'mongodb';
+import { COOKIE_NAME } from '../constants';
 import { MyContext } from '../types';
 import { User } from '../entities/User';
 // import { Validation } from '../utils/validation';
@@ -64,6 +67,7 @@ export class UserResolver {
 		@Arg('options', () => UserInputRegister) options: UserInputRegister,
 		@Ctx() { em, req }: MyContext,
 	): Promise<UserResponse> {
+		console.log(options);
 		const errors: FieldError[] = [];
 		if (!validateEmail(options.email)) {
 			errors.push({
@@ -167,5 +171,20 @@ export class UserResolver {
 		return {
 			user,
 		};
+	}
+
+	@Mutation(() => Boolean)
+	async logout(
+		@Ctx() { req, res }: MyContext,
+	): Promise<Boolean> {
+		return new Promise((resolve) => req.session.destroy((err: any) => {
+			res.clearCookie(COOKIE_NAME);
+			if (err) {
+				console.log(err);
+				resolve(false);
+				return;
+			}
+			resolve(true);
+		}));
 	}
 }

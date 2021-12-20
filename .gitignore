@@ -6,3 +6,6 @@
 
 # pnpm debug log
 .pnpm-debug.log
+
+# Local root files
+NOTES.md

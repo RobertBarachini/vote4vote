@@ -56,8 +56,6 @@
       "./dist/mikro-orm.config.js"
     ]
   },
-	"files": [
-
-	],
+  "files": [],
   "description": "TODO vote4vote"
 }
