@@ -1,0 +1,15 @@
+query Posts {
+  posts{
+    _id,
+    title,
+    updatedAt,
+    createdAt,
+		authorId,
+    teams {
+      _id,
+      title,
+      imageUrl,
+      color,
+    }
+  }
+}

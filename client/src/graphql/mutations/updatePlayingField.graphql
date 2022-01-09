@@ -1,0 +1,13 @@
+mutation UpdatePlayingField($id: String!, $elementsClicked: String!) {
+	updatePlayingField(
+		options:{
+			id: $id,
+			elementsClicked: $elementsClicked
+		}
+	) {
+		_id,
+		title,
+		updatedAt,
+		playingFieldText
+	}
+}

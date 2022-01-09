@@ -1,0 +1,13 @@
+mutation CreatePost($title: String!, $playingFieldSize: Float!, $teamsArg: String!) {
+createPost(options: {
+	title: $title,
+	playingFieldSize: $playingFieldSize,
+	teamsArg: $teamsArg
+	}) 
+	{
+		_id,
+		title,
+		createdAt,
+		updatedAt,
+	}
+}

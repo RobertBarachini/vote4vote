@@ -59,6 +59,16 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 			bg="teal.500"
 			p={5}
 		>
+			<NextLink href="/">
+				<Link color="white" fontSize="lg" mr={6}>
+					Home
+				</Link>
+			</NextLink>
+			<NextLink href="/post/create">
+				<Link color="white" fontSize="lg">
+					New post
+				</Link>
+			</NextLink>
 			<Box
 				ml={'auto'}
 			>

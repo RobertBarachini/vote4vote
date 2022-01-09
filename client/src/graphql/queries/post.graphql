@@ -1,0 +1,15 @@
+query Post($id: String!) {
+  post (
+		id: $id
+	) {
+    _id,
+    title,
+    updatedAt,
+		playingFieldText,
+		teams{
+			title,
+			imageUrl,
+			color
+		}
+  }
+}

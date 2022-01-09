@@ -65,9 +65,10 @@ redis-cli
 
 Test it
 ```redis
-ping
 auth <your_password>
+ping
 set test1 = "Hello redis"
 get test1
+KEYS *
 quit
 ```
